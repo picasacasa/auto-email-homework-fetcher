@@ -3,7 +3,6 @@
 import getpass, poplib, configparser, sqlite3, email, re, os, sys, time
 from email.header import decode_header
 
-# 萃取
 email_extractor = re.compile(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)")
 
 # read config
@@ -75,17 +74,5 @@ def refresh_mail():
     conn.commit()
     M.quit()
 
-if __name__ == "__main__":
-    if not interval:
-        refresh_mail()
-    else:
-        while True:
-            try:
-                refresh_mail()
-                print("Sleeping %d seconds." % interval, file=sys.stderr)
-                time.sleep(interval)
-            except KeyboardInterrupt:
-                print("Quitting...", file=sys.stderr)
-                break
-
-    conn.close()
+refresh_mail()
+conn.close()

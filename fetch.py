@@ -3,6 +3,7 @@
 import getpass, poplib, configparser, sqlite3, email, re, os, sys, time
 from email.header import decode_header
 
+# 萃取
 email_extractor = re.compile(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)")
 
 # read config
@@ -64,7 +65,7 @@ def refresh_mail():
                         filename = parse(part.get_filename())
                         file = part.get_payload(decode=True)
                         print("    Saving attachment %s" % filename, file=sys.stderr)
-                        open(os.path.join(config['config']['base_folder'], dir_dict[receiver], filename), 'wb').write(file)
+                        open(os.path.join(config['config']['base_folder'], dir_dict[receiver], sender + '#' + filename), 'wb').write(file)
             c.execute('UPDATE mailbox SET received=1, sender=?, receiver=?, time=?, subject=? WHERE ID = ?', (sender, receiver, date, subject, id))
             conn.commit()
         except KeyError:
